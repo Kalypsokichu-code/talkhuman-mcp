@@ -1,3 +1,4 @@
+```
 ooooooooooooo           oooo  oooo
 8'   888   `8           `888  `888
      888       .oooo.    888   888  oooo
@@ -13,7 +14,7 @@ ooooo   ooooo
  888     888   888   888   888   888   888   .oP"888   888   888
  888     888   888   888   888   888   888  d8(  888   888   888
 o888o   o888o  `V88V"V8P' o888o o888o o888o `Y888""8o o888o o888o
-
+```
 # TalkHuman MCP
 > AI that writes like a human
 
