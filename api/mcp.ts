@@ -145,21 +145,25 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
           const findings: string[] = [];
           const textLower = text.toLowerCase();
+          const words = text.split(/\s+/);
+          const sentences = text.split(/[.!?]+/).filter((s: string) => s.trim().length > 0);
 
+          // AI Cliché Phrases (β=0.05 tone correlation)
           const aiPhrases = [
             "delve into", "it's important to note", "it's worth noting",
             "in today's digital age", "dive deep", "game changer",
             "unlock the potential", "landscape", "leverage",
             "cutting-edge", "paradigm shift", "robust", "utilize",
-            "seamless", "holistic", "synergy", "ecosystem", "journey"
+            "seamless", "holistic", "synergy", "ecosystem", "journey",
+            "revolutionize", "transform", "empower", "facilitate"
           ];
 
           const foundPhrases = aiPhrases.filter((phrase: string) => textLower.includes(phrase));
           if (foundPhrases.length > 0) {
-            findings.push(`⚠️ AI Cliché Phrases Found: ${foundPhrases.join(", ")}`);
+            findings.push(`Tone: AI cliché phrases - ${foundPhrases.join(", ")}`);
           }
 
-          const sentences = text.split(/[.!?]+/).filter((s: string) => s.trim().length > 0);
+          // Repetition (Templatedness detection)
           const starts = sentences.map((s: string) => s.trim().split(/\s+/)[0]?.toLowerCase()).filter(Boolean);
           const startCounts = starts.reduce((acc: Record<string, number>, start: string) => {
             acc[start] = (acc[start] || 0) + 1;
@@ -171,12 +175,51 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             .map(([word]) => word);
 
           if (repetitiveStarts.length > 0) {
-            findings.push(`⚠️ Repetitive Sentence Starts: ${repetitiveStarts.join(", ")}`);
+            findings.push(`Repetition: Formulaic sentence starts - ${repetitiveStarts.join(", ")}`);
+          }
+
+          // Verbosity check (avg words per sentence)
+          if (sentences.length > 0) {
+            const avgLength = words.length / sentences.length;
+            if (avgLength > 25) {
+              findings.push(`Verbosity: Average ${avgLength.toFixed(1)} words/sentence (target: 15-20)`);
+            }
+          }
+
+          // Word Complexity (unnecessary formal words)
+          const complexWords = [
+            "furthermore", "moreover", "thus", "hence", "whereby", "wherein",
+            "heretofore", "aforementioned", "notwithstanding"
+          ];
+          const foundComplex = complexWords.filter(word => textLower.includes(word));
+          if (foundComplex.length >= 2) {
+            findings.push(`Word Complexity: Unnecessarily formal - ${foundComplex.join(", ")}`);
+          }
+
+          // Density check (information content)
+          const uniqueWords = new Set(words.map(w => w.toLowerCase()));
+          const lexicalDensity = uniqueWords.size / words.length;
+          if (lexicalDensity < 0.4) {
+            findings.push(`Density: Low information content (${(lexicalDensity * 100).toFixed(0)}% unique words)`);
+          }
+
+          // List-heavy structure
+          const bulletPoints = (text.match(/^[\s]*[-•*]/gm) || []).length;
+          const numberedLists = (text.match(/^[\s]*\d+\./gm) || []).length;
+          if (bulletPoints > 5 || numberedLists > 5) {
+            findings.push(`Structure: List-heavy (${bulletPoints} bullets, ${numberedLists} numbered)`);
+          }
+
+          // Bias indicators (generic/standardized language)
+          const genericPhrases = ["in general", "typically", "usually", "often", "sometimes"];
+          const foundGeneric = genericPhrases.filter(phrase => textLower.includes(phrase));
+          if (foundGeneric.length >= 3) {
+            findings.push(`Bias: Over-standardized language - ${foundGeneric.join(", ")}`);
           }
 
           const result = findings.length > 0
-            ? `# AI Slop Analysis\n\n${findings.join("\n\n")}\n\n## Recommendation\nRevise the text to sound more human and natural.`
-            : "✅ No obvious AI slop detected. Text appears human-like.";
+            ? `# AI Slop Analysis\n\n${findings.join("\n")}\n\nCategories based on research (β=0.05-0.06 correlation with human perception)`
+            : "No AI slop detected";
 
           res.json({
             jsonrpc: "2.0",

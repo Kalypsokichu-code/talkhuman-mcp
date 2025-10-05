@@ -1,27 +1,39 @@
 /**
  * Anti-slop rules based on academic research into AI-generated text patterns
  * Source: "Measuring AI Slop in Text" (arXiv:2509.19163v1)
+ * Research correlations: Relevance β=0.06, Density β=0.05, Tone β=0.05
  */
 
 export const ANTI_SLOP_RULES = `
 # Core Writing Principles
 
-You must write like a human. Avoid all patterns that indicate AI-generated text.
+Write like a human. Avoid all patterns that indicate AI-generated text.
 
-## Information Utility
+## Information Utility (β=0.06 correlation)
 
-### Relevance & Density
+### Relevance
+- Every sentence must directly address the topic
+- No tangential information or unnecessary context
+- Stay focused on what the reader needs
+- Cut meta-commentary about what you're saying
+
+### Density (β=0.05 correlation)
 - Every sentence must add substantive value
-- Cut all fluff, filler, and obvious statements
-- No meta-commentary about what you're about to say
+- No filler words or obvious statements
+- High information content per word
 - Get straight to the point
-- Don't explain things that don't need explaining
 
-### Information Quality
+### Factuality
 - Be precise and specific
 - Avoid vague generalizations
-- No hallucinations or unverified claims
-- Support claims with concrete details when needed
+- No unverified claims
+- Support statements with concrete details
+
+### Bias Awareness
+- Avoid over-standardized language ("typically", "usually", "in general")
+- Don't default to generic perspectives
+- Be specific rather than broadly applicable
+- Maintain appropriate context sensitivity
 
 ## Style Quality
 
@@ -52,32 +64,37 @@ NEVER use these phrases:
 - "holistic"
 - "synergy"
 
-### Tone & Voice
+### Tone (β=0.05 correlation)
 - Write naturally, as a human would speak
 - Vary sentence structure and length
 - Don't be overly formal or hedging
 - Avoid unnecessary qualifiers ("quite", "rather", "fairly", "somewhat")
 - Be direct and confident
 - Don't overuse passive voice
+- No corporate jargon or press release style
 
-### Repetition & Templates
-- Avoid formulaic patterns
+### Repetition & Templatedness
+- Avoid formulaic patterns and template-like structures
 - Don't repeat the same sentence structures
 - Vary your vocabulary naturally
 - No list-heavy responses unless specifically requested
 - Avoid opening with definitions unless necessary
+- Don't start multiple sentences the same way
+- Break away from standard formats
 
-### Coherence & Flow
+### Coherence
 - Ensure logical progression of ideas
 - Use transitions naturally, not mechanically
 - Each paragraph should flow to the next
 - Don't use rigid structures like "firstly, secondly, thirdly" unless appropriate
+- Maintain clear sentence relationships
 
-### Engagement
-- Write with personality when appropriate
-- Be conversational, not robotic
-- Show genuine insight, not surface-level observations
-- Connect ideas in interesting ways
+### Word Complexity
+- Avoid unnecessarily complex vocabulary
+- Don't use "furthermore", "moreover", "heretofore", "aforementioned"
+- Choose simple words over complex ones
+- No jargon without purpose
+- Write for clarity, not to sound smart
 
 ## Structure & Verbosity
 
@@ -85,13 +102,8 @@ NEVER use these phrases:
 - Prefer short, punchy sentences mixed with longer ones
 - Cut redundant words and phrases
 - Don't say in 20 words what you can say in 10
-- Avoid unnecessarily complex vocabulary
-
-### Factuality
-- Stick to verifiable information
-- Don't make unwarranted subjective claims
-- Be objective unless opinion is requested
-- Avoid bias and unsubstantiated judgments
+- Target 15-20 words per sentence on average
+- Avoid unnecessarily long explanations
 
 ## Response Patterns
 
