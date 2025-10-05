@@ -1,44 +1,26 @@
-```
-ooooooooooooo           oooo  oooo
-8'   888   `8           `888  `888
-     888       .oooo.    888   888  oooo
-     888      `P  )88b   888   888 .8P'
-     888       .oP"888   888   888888.
-     888      d8(  888   888   888 `88b.
-    o888o     `Y888""8o o888o o888o o888o
-
-ooooo   ooooo
-`888'   `888'
- 888     888  oooo  oooo  ooo. .oo.  .oo.    .oooo.   ooo. .oo.
- 888ooooo888  `888  `888  `888P"Y88bP"Y88b  `P  )88b  `888P"Y88b
- 888     888   888   888   888   888   888   .oP"888   888   888
- 888     888   888   888   888   888   888  d8(  888   888   888
-o888o   o888o  `V88V"V8P' o888o o888o o888o `Y888""8o o888o o888o
-```
 # TalkHuman MCP
-> AI that writes like a human
 
-Model Context Protocol server that eliminates AI slop. Based on research analyzing expert annotations from NLP writers and philosophers.
+> AI that writes like a human — eliminate AI slop with research-backed detection
+
+Model Context Protocol server that helps AI write naturally. Based on expert annotations from NLP writers and philosophers analyzing AI-generated text patterns.
 
 [![Deploy to Vercel](https://vercel.com/button)](https://vercel.com/import/project?template=https://github.com/Kalypsokichu-code/talkhuman-mcp)
 
-## What is AI Slop?
+## 🎯 What is AI Slop?
 
-Low-quality AI text with telltale patterns:
+Low-quality AI text characterized by:
 
-- **Information Utility**: Low density, irrelevant content, factual errors
-- **Style Quality**: Repetitive structures, clichés like "delve into", "leverage"
-- **Structure**: Excessive verbosity, poor coherence
+- **Information Utility**: Low content density, irrelevant filler, factual errors
+- **Style Quality**: Repetitive structures, corporate clichés ("delve into", "leverage")
+- **Structure**: Excessive verbosity, poor coherence, formulaic patterns
 
-Based on research from [arXiv:2509.19163v1](https://arxiv.org/abs/2509.19163).
+Research foundation: [arXiv:2509.19163v1](https://arxiv.org/abs/2509.19163)
 
-## Setup
+## 🚀 Quick Start
 
-### Claude Desktop
+### Claude Desktop (HTTP Transport)
 
-1. Edit `claude_desktop_config.json`
-
-2. Add configuration:
+Edit `~/Library/Application Support/Claude/claude_desktop_config.json`:
 
 ```json
 {
@@ -50,102 +32,124 @@ Based on research from [arXiv:2509.19163v1](https://arxiv.org/abs/2509.19163).
 }
 ```
 
-3. Restart Claude Desktop
+### Claude Desktop (Local stdio - Recommended for Development)
 
-### Other MCP Clients
+```json
+{
+  "mcpServers": {
+    "talkhuman": {
+      "command": "node",
+      "args": [
+        "/path/to/talkhuman-mcp/dist/index.js"
+      ]
+    }
+  }
+}
+```
 
-Use endpoint: `https://talkhuman-mcp.vercel.app/api/mcp`
+### Cursor IDE & Other MCP Clients
 
-Works with Cursor IDE and any MCP-compatible tool.
+Add to your MCP configuration:
 
-## Tools
+```json
+{
+  "mcpServers": {
+    "talkhuman": {
+      "url": "https://talkhuman-mcp.vercel.app/api/mcp"
+    }
+  }
+}
+```
 
-### get_human_writing_rules
+**Restart your client after configuration!**
 
-Get anti-slop rules for any writing context.
+## 🛠️ Available Tools
+
+### `get_human_writing_rules`
+
+Get comprehensive anti-slop writing rules tailored to your context.
+
+**Parameters:**
+- `context` (optional): Writing type (e.g., "technical blog", "email", "docs")
 
 **Example:**
 ```
 Get writing rules for a technical blog post
 ```
 
-### check_for_slop
+### `check_for_slop`
 
-Analyze text for AI slop indicators.
+Analyze text for AI slop indicators across three dimensions.
+
+**Parameters:**
+- `text` (required): The text to analyze
 
 **Example:**
 ```
-Check this for slop: "In today's digital landscape, it's important to note
-that we should leverage cutting-edge solutions..."
+Check this for slop: "In today's digital landscape, it's important to
+note that we should leverage cutting-edge solutions to deliver a
+seamless user experience..."
 ```
 
 **Returns:**
 ```
-AI Cliché Phrases Found: landscape, it's important to note, leverage,
-cutting-edge
+⚠️ AI Slop Analysis
+
+- Overused Phrases: Found AI clichés - landscape, it's important to note,
+  leverage, cutting-edge, seamless
+- Verbosity: Overly long sentences (avg 28.5 words)
+- Word Complexity: Unnecessarily formal - "utilize" → "use"
+
+Recommendation: Revise to be more concise, direct, and natural.
 ```
 
-### get_slop_examples
+### `get_slop_examples`
 
-Get examples of patterns to avoid.
+Get categorized examples of AI slop patterns to avoid.
+
+**Parameters:**
+- `category` (optional): `"phrases"`, `"structure"`, `"tone"`, or `"all"`
 
 **Example:**
 ```
 Show me phrase examples to avoid
 ```
 
-Categories: `phrases`, `structure`, `tone`, `all`
+## 🔍 What Gets Detected
 
-## Detection
+### Slop Phrases
 
-### Phrases
+- ❌ "delve into" → ✅ "explore"
+- ❌ "leverage" → ✅ "use"
+- ❌ "it's important to note" → ✅ just state it
+- ❌ "robust", "seamless", "holistic", "paradigm shift"
+- ❌ "cutting-edge", "game changer", "synergy"
 
-- "delve into" → use "explore"
-- "leverage" → use "use"
-- "it's important to note" → just state it
-- "robust", "seamless", "holistic", "paradigm shift"
-- "cutting-edge", "game changer"
+### Structural Issues
 
-### Structure
+- Repetitive sentence starts (same word 3+ times)
+- Excessive bullet points and lists
+- Overly formal language for casual contexts
+- Long sentences (>25 words average)
+- Low lexical density (<40% unique words)
 
-- Repetitive sentence starts
-- Excessive bullet points
-- Overly formal language
-- Long sentences (>25 words)
+### Research-Based Scoring
 
-### Research-Based
+Text analyzed across three weighted dimensions:
 
-Analyzes text across three dimensions:
+- **Information Utility** (β=0.06) - Content density, relevance
+- **Style Quality** (β=0.05) - Repetition, coherence, naturalness
+- **Structure** (β=0.05) - Verbosity, bias, flow
 
-- **Information Utility**: Density, relevance, quality (β=0.06)
-- **Style Quality**: Repetition, coherence, tone (β=0.05)
-- **Structure**: Verbosity, bias
-
-## Usage
-
-### In Claude Desktop
-
-```
-"Use the check_for_slop tool on my draft email"
-"Get human writing rules for casual social media posts"
-"Show me examples of AI slop to avoid in my writing"
-```
-
-### As Writing Assistant
-
-```
-"Check this article draft for AI slop patterns"
-"Get writing rules for professional emails, then draft a response"
-```
-
-## Development
+## 💻 Development
 
 ### Prerequisites
 
 - Node.js 18+
+- TypeScript 5.6+
 - npm or pnpm
 
-### Setup
+### Local Setup
 
 ```bash
 git clone https://github.com/Kalypsokichu-code/talkhuman-mcp
@@ -154,85 +158,160 @@ npm install
 npm run build
 ```
 
-### Scripts
+### Available Scripts
 
 - `npm run build` - Compile TypeScript
 - `npm run dev` - Watch mode for development
-- `npx ultracite check` - Lint code
-- `npx ultracite fix` - Auto-fix linting issues
+- `npm start` - Run stdio server locally
+- `npx ultracite check` - Lint check
+- `npx ultracite fix` - Auto-fix issues
 
-### Deploy Your Own
+### Testing Locally
+
+#### Test stdio transport (Claude Desktop):
+```bash
+npm run build
+npm start
+# Server runs on stdio, test with MCP inspector:
+npx @modelcontextprotocol/inspector node dist/index.js
+```
+
+#### Test HTTP transport (Cursor/Web):
+```bash
+vercel dev
+# Visit http://localhost:3000
+```
+
+## 🏗️ Architecture
+
+### Project Structure
+
+```
+talkhuman-mcp/
+├── api/                    # Vercel serverless functions
+│   ├── mcp.ts             # HTTP MCP endpoint (Streamable HTTP)
+│   ├── index.ts           # API info page
+│   ├── check.ts           # Slop detection API
+│   ├── rules.ts           # Rules API
+│   └── examples.ts        # Examples API
+├── src/                    # Core MCP server
+│   ├── index.ts           # stdio transport (Claude Desktop)
+│   └── rules.ts           # Anti-slop taxonomy
+├── public/
+│   └── index.html         # Homepage/docs
+└── dist/                   # Compiled output
+```
+
+### Dual Transport Support
+
+**stdio Transport** (Local/Claude Desktop):
+- Direct process communication
+- Low latency, persistent connection
+- Best for local development
+- Entry: `dist/index.js`
+
+**Streamable HTTP Transport** (Vercel/Web):
+- POST-only mode (MCP 2024-11-05 spec)
+- Fully stateless, serverless-optimized
+- No SSE (Vercel 60s timeout limitation)
+- Auto-scaling on demand
+- Endpoint: `/api/mcp`
+
+### Technology Stack
+
+- **Runtime**: TypeScript 5.6+ with Node.js ESM modules
+- **Validation**: Zod schemas for type safety
+- **Linting**: Ultracite (Biome-powered)
+- **MCP SDK**: `@modelcontextprotocol/sdk` v1.19+
+- **Deployment**: Vercel serverless functions
+
+## 🚢 Deploy Your Own
+
+### One-Click Deploy
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Kalypsokichu-code/talkhuman-mcp)
+
+### Manual Deploy
 
 ```bash
 npm install
-vercel deploy
+vercel deploy --prod
 ```
 
-Your MCP will be at: `https://your-project.vercel.app/api/mcp`
+Your MCP endpoint: `https://your-project.vercel.app/api/mcp`
 
-## How It Works
+### Environment Variables
 
-MCP server implements Streamable HTTP transport (MCP 2024-11-05 spec) in **POST-only mode**:
+None required! Server works out of the box.
 
-1. **POST** `/api/mcp` - Handles all JSON-RPC 2.0 requests (initialize, tools/list, tools/call)
-2. Fully stateless: no session management, no long-lived connections
-3. SSE disabled: Vercel serverless has 60s timeout, incompatible with persistent SSE streams
-4. Optimized for serverless: immediate responses, scales automatically
-5. Client compatibility: Works with all MCP clients supporting POST-only Streamable HTTP
+## 📚 Usage Examples
 
-## Architecture
+### In Claude Desktop
 
 ```
-├── api/
-│   ├── mcp.ts          # MCP Streamable HTTP endpoint
-│   ├── index.ts        # API info endpoint
-│   ├── rules.ts        # Anti-slop rules
-│   ├── check.ts        # Text analysis
-│   └── examples.ts     # Pattern examples
-├── src/
-│   └── rules.ts        # Anti-slop taxonomy
-├── public/
-│   └── index.html      # Documentation
-└── vercel.json         # Deployment config
+"Check my email draft for AI slop patterns"
+"Get writing rules for professional documentation"
+"Show me examples of phrases to avoid in blog posts"
 ```
 
-## Technical Details
+### As Writing Assistant
 
-### Transport: Streamable HTTP POST-only (MCP 2024-11-05)
+```
+"Analyze this paragraph and suggest improvements:
+[paste text]"
 
-- **Single endpoint**: `/api/mcp` accepts POST requests only
-- **SSE disabled**: Long-lived SSE connections timeout on Vercel (60s limit on Hobby tier)
-- **Fully stateless**: Zero session management, perfect for serverless auto-scaling
-- **Vercel optimized**: Follows MCP spec's POST-only mode for serverless deployments
-- **Why no SSE**: Per Vercel docs, "SSE requires persistent connections which are inefficient for scaling MCP servers"
+"Get human writing rules for casual Twitter posts,
+then help me write a thread"
+```
 
-### Stack
+### API Integration
 
-- **Runtime**: TypeScript 5.6+ with Node.js ESM
-- **Linting**: Ultracite (Biome-based formatter and linter)
-- **Validation**: Zod for schema validation
-- **Deployment**: Vercel serverless functions
+```bash
+# Check text for slop
+curl -X POST https://talkhuman-mcp.vercel.app/api/check \
+  -H "Content-Type: application/json" \
+  -d '{"text": "Your text here"}'
 
-## Research Foundation
+# Get writing rules
+curl https://talkhuman-mcp.vercel.app/api/rules?context=email
+```
 
-Expert annotations from NLP writers, philosophers, and industry professionals:
+## 🔬 Research Foundation
 
-- **Relevance** (β=0.06) - Most important indicator
-- **Density** (β=0.05) - Substantive content
-- **Tone** (β=0.05) - Natural voice
-- Coherence, Fluency, Structure
+Based on expert annotations from:
+- NLP researchers and writers
+- Professional philosophers
+- Industry content creators
 
-Correlation with human perception: AUROC 0.52-0.55
+**Key Findings:**
+- **Relevance** (β=0.06) - Most significant slop indicator
+- **Content Density** (β=0.05) - Substantive vs. filler content
+- **Natural Tone** (β=0.05) - Conversational vs. robotic voice
+- Human perception correlation: AUROC 0.52-0.55
 
-## Contributing
+Full paper: [arXiv:2509.19163](https://arxiv.org/abs/2509.19163)
 
-PRs welcome.
+## 📖 Documentation
 
-## License
+- [Claude Desktop Setup](./CLAUDE_DESKTOP_SETUP.md) - Detailed configuration guide
+- [API Reference](https://talkhuman-mcp.vercel.app/api) - REST API endpoints
+- [MCP Spec](https://spec.modelcontextprotocol.io) - Protocol documentation
 
-MIT
+## 🤝 Contributing
+
+Contributions welcome! Please:
+
+1. Fork the repository
+2. Create a feature branch
+3. Run `npx ultracite fix` before committing
+4. Submit a PR with clear description
+
+## 📝 License
+
+MIT License - see [LICENSE](./LICENSE) for details
 
 ---
 
-**Live:** [talkhuman-mcp.vercel.app](https://talkhuman-mcp.vercel.app)
+**Live Demo:** [talkhuman-mcp.vercel.app](https://talkhuman-mcp.vercel.app)
 **MCP Endpoint:** `https://talkhuman-mcp.vercel.app/api/mcp`
+**GitHub:** [Kalypsokichu-code/talkhuman-mcp](https://github.com/Kalypsokichu-code/talkhuman-mcp)

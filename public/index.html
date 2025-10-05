@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TalkHuman MCP</title>
+    <title>TalkHuman MCP - AI that writes like a human</title>
+    <meta name="description" content="Model Context Protocol server that eliminates AI slop with research-backed detection">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -51,32 +52,36 @@
 </head>
 <body class="bg-background text-foreground antialiased">
     <div class="min-h-screen flex items-center">
-        <div class="container mx-auto px-6 py-12 max-w-5xl">
+        <div class="container mx-auto px-6 py-12 max-w-6xl">
             <!-- Header -->
             <div class="mb-12">
-                <h1 class="text-4xl font-bold tracking-tight mb-3">TalkHuman MCP</h1>
-                <p class="text-muted-foreground text-lg">AI that writes like a human</p>
+                <h1 class="text-5xl font-bold tracking-tight mb-4">TalkHuman MCP</h1>
+                <p class="text-muted-foreground text-xl mb-2">AI that writes like a human</p>
+                <p class="text-sm text-muted-foreground">Research-backed detection eliminates AI slop patterns</p>
             </div>
 
-            <div class="grid md:grid-cols-2 gap-8 mb-12">
+            <div class="grid lg:grid-cols-3 gap-8 mb-12">
                 <!-- Left Column -->
-                <div class="space-y-8">
+                <div class="lg:col-span-1 space-y-6">
                     <!-- What is this -->
                     <div>
-                        <h2 class="text-xl font-semibold mb-3">What is this</h2>
-                        <p class="text-sm text-muted-foreground leading-relaxed">
-                            MCP server that eliminates AI slop. Based on research from NLP writers and philosophers.
-                            <a href="https://arxiv.org/abs/2509.19163" class="text-primary hover:underline" target="_blank">arXiv:2509.19163v1</a>
+                        <h2 class="text-xl font-semibold mb-3">What is this?</h2>
+                        <p class="text-sm text-muted-foreground leading-relaxed mb-3">
+                            MCP server that helps AI write naturally by detecting and preventing slop patterns.
+                        </p>
+                        <p class="text-xs text-muted-foreground">
+                            Based on research from NLP writers and philosophers •
+                            <a href="https://arxiv.org/abs/2509.19163" class="text-primary hover:underline" target="_blank">arXiv:2509.19163</a>
                         </p>
                     </div>
 
-                    <!-- Setup -->
+                    <!-- Quick Setup -->
                     <div>
-                        <h2 class="text-xl font-semibold mb-4">Setup</h2>
+                        <h2 class="text-xl font-semibold mb-3">Quick Setup</h2>
                         <div class="space-y-3">
-                            <div class="rounded-2xl border border-border bg-secondary/50 p-5">
-                                <h3 class="text-sm font-semibold mb-2">1. Configure Claude Desktop</h3>
-                                <pre class="overflow-x-auto text-xs"><code>{
+                            <div class="rounded-xl border border-border bg-secondary/50 p-4">
+                                <h3 class="text-sm font-semibold mb-2">Claude Desktop (HTTP)</h3>
+                                <pre class="overflow-x-auto text-xs bg-background/50 p-2 rounded"><code>{
   "mcpServers": {
     "talkhuman": {
       "url": "https://talkhuman-mcp.vercel.app/api/mcp"
@@ -84,54 +89,118 @@
   }
 }</code></pre>
                             </div>
-                            <div class="rounded-2xl border border-border bg-secondary/50 p-5">
-                                <h3 class="text-sm font-semibold mb-1">2. Restart Claude Desktop</h3>
-                                <p class="text-xs text-muted-foreground">Tools available after restart</p>
+                            <div class="rounded-xl border border-border bg-secondary/50 p-4">
+                                <h3 class="text-sm font-semibold mb-2">Claude Desktop (stdio)</h3>
+                                <pre class="overflow-x-auto text-xs bg-background/50 p-2 rounded"><code>{
+  "mcpServers": {
+    "talkhuman": {
+      "command": "node",
+      "args": ["/path/to/dist/index.js"]
+    }
+  }
+}</code></pre>
+                            </div>
+                            <div class="rounded-xl border border-border bg-secondary/50 p-3">
+                                <p class="text-xs text-muted-foreground">Restart Claude Desktop after config</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Middle Column -->
+                <div class="lg:col-span-1 space-y-6">
+                    <!-- Tools -->
+                    <div>
+                        <h2 class="text-xl font-semibold mb-3">Available Tools</h2>
+                        <div class="space-y-3">
+                            <div class="rounded-xl border border-border bg-secondary/50 p-4">
+                                <h3 class="font-mono text-sm font-semibold mb-1">get_human_writing_rules</h3>
+                                <p class="text-xs text-muted-foreground mb-2">Get anti-slop guidelines for any writing context</p>
+                                <code class="text-xs text-muted-foreground">context: "technical blog" (optional)</code>
+                            </div>
+                            <div class="rounded-xl border border-border bg-secondary/50 p-4">
+                                <h3 class="font-mono text-sm font-semibold mb-1">check_for_slop</h3>
+                                <p class="text-xs text-muted-foreground mb-2">Analyze text for AI slop indicators</p>
+                                <code class="text-xs text-muted-foreground">text: string (required)</code>
+                            </div>
+                            <div class="rounded-xl border border-border bg-secondary/50 p-4">
+                                <h3 class="font-mono text-sm font-semibold mb-1">get_slop_examples</h3>
+                                <p class="text-xs text-muted-foreground mb-2">View categorized slop patterns to avoid</p>
+                                <code class="text-xs text-muted-foreground">category: phrases|structure|tone|all</code>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Transport Options -->
+                    <div>
+                        <h2 class="text-xl font-semibold mb-3">Transport Options</h2>
+                        <div class="space-y-2">
+                            <div class="rounded-xl border border-border bg-secondary/50 p-3">
+                                <div class="flex items-center justify-between mb-1">
+                                    <h3 class="text-sm font-semibold">stdio</h3>
+                                    <span class="text-xs text-muted-foreground">Local/Claude Desktop</span>
+                                </div>
+                                <p class="text-xs text-muted-foreground">Direct process communication, low latency</p>
+                            </div>
+                            <div class="rounded-xl border border-border bg-secondary/50 p-3">
+                                <div class="flex items-center justify-between mb-1">
+                                    <h3 class="text-sm font-semibold">Streamable HTTP</h3>
+                                    <span class="text-xs text-muted-foreground">Vercel/Cursor</span>
+                                </div>
+                                <p class="text-xs text-muted-foreground">POST-only, serverless auto-scaling</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Right Column -->
-                <div class="space-y-8">
-                    <!-- Tools -->
+                <div class="lg:col-span-1 space-y-6">
+                    <!-- Detection Patterns -->
                     <div>
-                        <h2 class="text-xl font-semibold mb-4">Tools</h2>
-                        <div class="space-y-3">
-                            <div class="rounded-2xl border border-border bg-secondary/50 p-4">
-                                <h3 class="font-mono text-xs font-semibold mb-1">get_human_writing_rules</h3>
-                                <p class="text-xs text-muted-foreground">Guidelines for natural writing</p>
+                        <h2 class="text-xl font-semibold mb-3">What Gets Detected</h2>
+                        <div class="rounded-xl border border-border bg-secondary/50 p-4">
+                            <div class="mb-4">
+                                <h3 class="text-sm font-semibold mb-2">Slop Phrases</h3>
+                                <div class="space-y-1 text-xs">
+                                    <div class="text-muted-foreground">❌ "delve into" → ✅ "explore"</div>
+                                    <div class="text-muted-foreground">❌ "leverage" → ✅ "use"</div>
+                                    <div class="text-muted-foreground">❌ "it's worth noting" → ✅ just state it</div>
+                                    <div class="text-muted-foreground">❌ robust, seamless, synergy</div>
+                                </div>
                             </div>
-                            <div class="rounded-2xl border border-border bg-secondary/50 p-4">
-                                <h3 class="font-mono text-xs font-semibold mb-1">check_for_slop</h3>
-                                <p class="text-xs text-muted-foreground">Detect AI patterns</p>
+                            <div class="mb-4">
+                                <h3 class="text-sm font-semibold mb-2">Structure Issues</h3>
+                                <div class="space-y-1 text-xs text-muted-foreground">
+                                    <div>• Repetitive sentence starts (3+)</div>
+                                    <div>• Long sentences (>25 words avg)</div>
+                                    <div>• Low lexical density (<40%)</div>
+                                    <div>• Excessive formality</div>
+                                </div>
                             </div>
-                            <div class="rounded-2xl border border-border bg-secondary/50 p-4">
-                                <h3 class="font-mono text-xs font-semibold mb-1">get_slop_examples</h3>
-                                <p class="text-xs text-muted-foreground">Patterns to avoid</p>
+                            <div>
+                                <h3 class="text-sm font-semibold mb-2">Research Weights</h3>
+                                <div class="space-y-1 text-xs text-muted-foreground">
+                                    <div>Information Utility: β=0.06</div>
+                                    <div>Style Quality: β=0.05</div>
+                                    <div>Structure: β=0.05</div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Patterns -->
+                    <!-- Usage Example -->
                     <div>
-                        <h2 class="text-xl font-semibold mb-4">Detected patterns</h2>
-                        <div class="rounded-2xl border border-border bg-secondary/50 p-5">
-                            <div class="mb-4">
-                                <h3 class="text-sm font-semibold mb-2">Phrases</h3>
-                                <div class="flex flex-wrap gap-2">
-                                    <span class="text-xs text-muted-foreground">delve into</span>
-                                    <span class="text-xs text-muted-foreground">leverage</span>
-                                    <span class="text-xs text-muted-foreground">robust</span>
-                                    <span class="text-xs text-muted-foreground">seamless</span>
+                        <h2 class="text-xl font-semibold mb-3">Example Output</h2>
+                        <div class="rounded-xl border border-border bg-secondary/50 p-4">
+                            <div class="text-xs space-y-2">
+                                <div class="font-semibold">⚠️ AI Slop Analysis</div>
+                                <div class="text-muted-foreground">
+                                    <div>• Overused Phrases: leverage, cutting-edge</div>
+                                    <div>• Verbosity: Avg 28 words/sentence</div>
+                                    <div>• Word Complexity: "utilize" → "use"</div>
                                 </div>
-                            </div>
-                            <div>
-                                <h3 class="text-sm font-semibold mb-2">Structure</h3>
-                                <div class="space-y-1 text-xs text-muted-foreground">
-                                    <div>Repetitive starts</div>
-                                    <div>Excessive lists</div>
-                                    <div>Long sentences</div>
+                                <div class="pt-2 border-t border-border text-muted-foreground">
+                                    <strong>Recommendation:</strong> Revise to be more concise and natural
                                 </div>
                             </div>
                         </div>
@@ -141,13 +210,16 @@
 
             <!-- Footer -->
             <div class="border-t border-border pt-6">
-                <div class="flex justify-between items-center">
-                    <div class="flex gap-4 text-xs text-muted-foreground">
+                <div class="flex flex-wrap justify-between items-center gap-4">
+                    <div class="flex gap-6 text-sm text-muted-foreground">
                         <a href="https://github.com/Kalypsokichu-code/talkhuman-mcp" class="hover:text-foreground transition-colors" target="_blank">GitHub</a>
+                        <a href="https://github.com/Kalypsokichu-code/talkhuman-mcp/blob/main/README.md" class="hover:text-foreground transition-colors" target="_blank">Docs</a>
                         <a href="https://arxiv.org/abs/2509.19163" class="hover:text-foreground transition-colors" target="_blank">Research</a>
-                        <a href="https://talkhuman-mcp.vercel.app/api/mcp" class="hover:text-foreground transition-colors" target="_blank">API</a>
+                        <a href="https://talkhuman-mcp.vercel.app/api" class="hover:text-foreground transition-colors" target="_blank">API</a>
                     </div>
-                    <div class="text-xs text-muted-foreground">β=0.06 | β=0.05</div>
+                    <div class="text-xs text-muted-foreground">
+                        MCP 2024-11-05 • TypeScript • Vercel
+                    </div>
                 </div>
             </div>
         </div>
