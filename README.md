@@ -151,18 +151,19 @@ Your MCP will be at: `https://your-project.vercel.app/api/mcp`
 
 ## How It Works
 
-MCP server implements SSE (Server-Sent Events) transport:
+MCP server implements Streamable HTTP transport (MCP 2024-11-05 spec):
 
-1. Client connects to `/api/mcp` endpoint
-2. Server streams MCP events over SSE
-3. Tools invoked via JSON-RPC 2.0 messages
-4. Results returned based on research-backed rules
+1. Client sends POST requests to `/api/mcp` endpoint
+2. Server processes JSON-RPC 2.0 messages
+3. Tools invoked and executed via MCP SDK
+4. Results returned immediately (no session state required)
+5. Serverless-friendly: works reliably across Vercel's distributed infrastructure
 
 ## Architecture
 
 ```
 ├── api/
-│   ├── mcp.ts          # MCP SSE server endpoint
+│   ├── mcp.ts          # MCP Streamable HTTP endpoint
 │   ├── index.ts        # API info endpoint
 │   ├── rules.ts        # Anti-slop rules
 │   ├── check.ts        # Text analysis
@@ -173,6 +174,15 @@ MCP server implements SSE (Server-Sent Events) transport:
 │   └── index.html      # Documentation
 └── vercel.json         # Deployment config
 ```
+
+## Technical Details
+
+### Transport: Streamable HTTP (MCP 2024-11-05)
+
+- **Single endpoint**: `/api/mcp` handles all JSON-RPC messages via POST
+- **No session state**: Stateless design perfect for serverless
+- **Standards-compliant**: Follows latest MCP specification
+- **Deprecated SSE removed**: Old HTTP+SSE transport replaced (March 2025 spec update)
 
 ## Research Foundation
 
