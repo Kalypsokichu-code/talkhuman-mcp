@@ -1,57 +1,27 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { Tool } from "@modelcontextprotocol/sdk/types.js";
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { ANTI_SLOP_RULES } from "../src/rules.js";
+import { z } from "zod";
 
-const TOOLS: Tool[] = [
-  {
-    name: "get_human_writing_rules",
-    description: "Get comprehensive rules for writing like a human and avoiding AI slop. Use these rules as system-level instructions for any text generation task.",
-    inputSchema: {
-      type: "object",
-      properties: {
-        context: {
-          type: "string",
-          description: "Optional: The context or type of writing (e.g., 'technical documentation', 'casual email', 'blog post')",
-        },
+// Create and configure a new MCP server instance for this request
+function createServer(): McpServer {
+  const server = new McpServer({
+    name: "talkhuman-mcp",
+    version: "1.0.0",
+  });
+
+  // Register tool: get_human_writing_rules
+  server.registerTool(
+    "get_human_writing_rules",
+    {
+      title: "Get Human Writing Rules",
+      description: "Get comprehensive rules for writing like a human and avoiding AI slop. Use these rules as system-level instructions for any text generation task.",
+      inputSchema: {
+        context: z.string().optional().describe("Optional: The context or type of writing (e.g., 'technical documentation', 'casual email', 'blog post')"),
       },
     },
-  },
-  {
-    name: "check_for_slop",
-    description: "Analyze text for AI slop indicators across three categories: Information Utility, Style Quality, and Structure. Returns specific patterns to avoid.",
-    inputSchema: {
-      type: "object",
-      properties: {
-        text: {
-          type: "string",
-          description: "The text to analyze for AI slop indicators",
-        },
-      },
-      required: ["text"],
-    },
-  },
-  {
-    name: "get_slop_examples",
-    description: "Get examples of common AI slop phrases and patterns to avoid, categorized by type.",
-    inputSchema: {
-      type: "object",
-      properties: {
-        category: {
-          type: "string",
-          enum: ["phrases", "structure", "tone", "all"],
-          description: "The category of slop examples to retrieve",
-        },
-      },
-    },
-  },
-];
-
-// Tool execution function
-async function executeTool(name: string, args: any) {
-
-  switch (name) {
-    case "get_human_writing_rules": {
-      const context = args?.context || "";
+    async ({ context }) => {
       let rules = ANTI_SLOP_RULES;
 
       if (context) {
@@ -62,14 +32,19 @@ async function executeTool(name: string, args: any) {
         content: [{ type: "text", text: rules }],
       };
     }
+  );
 
-    case "check_for_slop": {
-      const text = args?.text;
-
-      if (!text) {
-        throw new Error("No text provided");
-      }
-
+  // Register tool: check_for_slop
+  server.registerTool(
+    "check_for_slop",
+    {
+      title: "Check for AI Slop",
+      description: "Analyze text for AI slop indicators across three categories: Information Utility, Style Quality, and Structure. Returns specific patterns to avoid.",
+      inputSchema: {
+        text: z.string().describe("The text to analyze for AI slop indicators"),
+      },
+    },
+    async ({ text }) => {
       const findings: string[] = [];
       const textLower = text.toLowerCase();
       const words = text.split(/\s+/);
@@ -152,12 +127,23 @@ async function executeTool(name: string, args: any) {
         content: [{ type: "text", text: result }],
       };
     }
+  );
 
-    case "get_slop_examples": {
-      const category = args?.category || "all";
+  // Register tool: get_slop_examples
+  server.registerTool(
+    "get_slop_examples",
+    {
+      title: "Get Slop Examples",
+      description: "Get examples of common AI slop phrases and patterns to avoid, categorized by type.",
+      inputSchema: {
+        category: z.enum(["phrases", "structure", "tone", "all"]).optional().describe("The category of slop examples to retrieve"),
+      },
+    },
+    async ({ category }) => {
+      const cat = category || "all";
       let examples = "# AI Slop Examples to Avoid\n\n";
 
-      if (category === "phrases" || category === "all") {
+      if (cat === "phrases" || cat === "all") {
         examples += `## Overused AI Phrases\n\n`;
         examples += `Never use:\n`;
         examples += `- "delve into" → use "explore" or "examine"\n`;
@@ -165,7 +151,7 @@ async function executeTool(name: string, args: any) {
         examples += `- "utilize" → use "use"\n\n`;
       }
 
-      if (category === "structure" || category === "all") {
+      if (cat === "structure" || cat === "all") {
         examples += `## Structural Patterns to Avoid\n\n`;
         examples += `❌ Don't:\n`;
         examples += `- Start every sentence the same way\n`;
@@ -176,14 +162,13 @@ async function executeTool(name: string, args: any) {
         content: [{ type: "text", text: examples }],
       };
     }
+  );
 
-    default:
-      throw new Error(`Unknown tool: ${name}`);
-  }
+  return server;
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  // CORS headers
+  // CORS headers - required for browser-based MCP clients
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -193,88 +178,88 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return;
   }
 
-  // Streamable HTTP for serverless: POST-only mode (SSE disabled for Vercel compatibility)
-  // SSE requires long-lived connections that timeout on Vercel serverless (60s max)
+  // Only POST requests are supported in stateless mode
   if (req.method === 'POST') {
     try {
-      const message = req.body;
-
-      // Validate JSON-RPC
-      if (!message.jsonrpc || message.jsonrpc !== "2.0") {
-        res.status(400).json({ 
-          jsonrpc: "2.0", 
-          id: message.id || null, 
-          error: { code: -32600, message: "Invalid JSON-RPC version" } 
-        });
-        return;
-      }
-
-      // Handle initialize request
-      if (message.method === "initialize") {
-        res.json({
-          jsonrpc: "2.0",
-          id: message.id,
-          result: {
-            protocolVersion: "2024-11-05",
-            capabilities: {
-              tools: {},
-            },
-            serverInfo: {
-              name: "talkhuman-mcp",
-              version: "1.0.0",
-            },
+      // Validate that we have a request body
+      if (!req.body || typeof req.body !== 'object') {
+        res.status(400).json({
+          jsonrpc: '2.0',
+          error: {
+            code: -32700,
+            message: 'Parse error: Invalid or missing request body',
           },
+          id: null,
         });
         return;
       }
 
-      // Handle notifications (no response needed)
-      if (message.method === "notifications/initialized") {
-        res.status(200).end();
-        return;
-      }
-
-      // Handle tools/list
-      if (message.method === "tools/list") {
-        res.json({
-          jsonrpc: "2.0",
-          id: message.id,
-          result: { tools: TOOLS },
-        });
-        return;
-      }
-
-      // Handle tools/call
-      if (message.method === "tools/call") {
-        const { name, arguments: args } = message.params;
-        const result = await executeTool(name, args);
-        res.json({
-          jsonrpc: "2.0",
-          id: message.id,
-          result,
-        });
-        return;
-      }
-
-      // Unknown method
-      res.json({
-        jsonrpc: "2.0",
-        id: message.id,
-        error: { code: -32601, message: `Method not found: ${message.method}` },
+      // In stateless mode, create a new instance of transport and server for each request
+      // to ensure complete isolation. A single instance would cause request ID collisions
+      // when multiple clients connect concurrently.
+      const transport = new StreamableHTTPServerTransport({
+        sessionIdGenerator: undefined, // Stateless mode - no session management
       });
-      return;
+
+      const server = createServer();
+
+      // Clean up on request close
+      res.on('close', () => {
+        transport.close();
+        server.close();
+      });
+
+      // Connect server to transport
+      await server.connect(transport);
+
+      // Handle the MCP request
+      await transport.handleRequest(req, res, req.body);
+
     } catch (error: any) {
-      res.status(500).json({
-        jsonrpc: "2.0",
-        id: req.body?.id || null,
-        error: { 
-          code: -32603, 
-          message: error.message || "Internal error" 
-        },
-      });
-      return;
+      console.error('Error handling MCP request:', error);
+      
+      // Only send error response if headers haven't been sent yet
+      if (!res.headersSent) {
+        res.status(500).json({
+          jsonrpc: '2.0',
+          error: {
+            code: -32603,
+            message: error.message || 'Internal server error',
+          },
+          id: req.body?.id || null,
+        });
+      }
     }
+    return;
   }
 
-  res.status(405).json({ error: 'Method not allowed' });
+  // SSE notifications not supported in stateless mode
+  if (req.method === 'GET') {
+    res.status(405).json({
+      jsonrpc: '2.0',
+      error: {
+        code: -32000,
+        message: 'Method not allowed. This server runs in stateless mode and does not support SSE notifications.',
+      },
+      id: null,
+    });
+    return;
+  }
+
+  // Session termination not needed in stateless mode
+  if (req.method === 'DELETE') {
+    res.status(405).json({
+      jsonrpc: '2.0',
+      error: {
+        code: -32000,
+        message: 'Method not allowed. This server runs in stateless mode without session management.',
+      },
+      id: null,
+    });
+    return;
+  }
+
+  res.status(405).json({ 
+    error: 'Method not allowed. Only POST requests are supported.' 
+  });
 }
