@@ -6,7 +6,7 @@ Model Context Protocol server that helps AI write naturally. Based on expert ann
 
 [![Deploy to Vercel](https://vercel.com/button)](https://vercel.com/import/project?template=https://github.com/Kalypsokichu-code/talkhuman-mcp)
 
-## 🎯 What is AI Slop?
+## What is AI Slop?
 
 Low-quality AI text characterized by:
 
@@ -16,7 +16,7 @@ Low-quality AI text characterized by:
 
 Research foundation: [arXiv:2509.19163v1](https://arxiv.org/abs/2509.19163)
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Claude Desktop (HTTP Transport)
 
@@ -63,7 +63,7 @@ Add to your MCP configuration:
 
 **Restart your client after configuration!**
 
-## 🛠️ Available Tools
+## Available Tools
 
 ### `get_human_writing_rules`
 
@@ -115,15 +115,15 @@ Get categorized examples of AI slop patterns to avoid.
 Show me phrase examples to avoid
 ```
 
-## 🔍 What Gets Detected
+## What Gets Detected
 
 ### Slop Phrases
 
-- ❌ "delve into" → ✅ "explore"
-- ❌ "leverage" → ✅ "use"
-- ❌ "it's important to note" → ✅ just state it
-- ❌ "robust", "seamless", "holistic", "paradigm shift"
-- ❌ "cutting-edge", "game changer", "synergy"
+- "delve into" → "explore"
+- "leverage" → "use"
+- "it's important to note" → just state it
+- "robust", "seamless", "holistic", "paradigm shift"
+- "cutting-edge", "game changer", "synergy"
 
 ### Structural Issues
 
@@ -141,7 +141,7 @@ Text analyzed across three weighted dimensions:
 - **Style Quality** (β=0.05) - Repetition, coherence, naturalness
 - **Structure** (β=0.05) - Verbosity, bias, flow
 
-## 💻 Development
+## Development
 
 ### Prerequisites
 
@@ -182,7 +182,7 @@ vercel dev
 # Visit http://localhost:3000
 ```
 
-## 🏗️ Architecture
+## Architecture
 
 ### Project Structure
 
@@ -225,7 +225,7 @@ talkhuman-mcp/
 - **MCP SDK**: `@modelcontextprotocol/sdk` v1.19+
 - **Deployment**: Vercel serverless functions
 
-## 🚢 Deploy Your Own
+## Deploy Your Own
 
 ### One-Click Deploy
 
@@ -244,7 +244,7 @@ Your MCP endpoint: `https://your-project.vercel.app/api/mcp`
 
 None required! Server works out of the box.
 
-## 📚 Usage Examples
+## Usage Examples
 
 ### In Claude Desktop
 
@@ -276,7 +276,7 @@ curl -X POST https://talkhuman-mcp.vercel.app/api/check \
 curl https://talkhuman-mcp.vercel.app/api/rules?context=email
 ```
 
-## 🔬 Research Foundation
+## Research Foundation
 
 Based on expert annotations from:
 - NLP researchers and writers
@@ -291,13 +291,13 @@ Based on expert annotations from:
 
 Full paper: [arXiv:2509.19163](https://arxiv.org/abs/2509.19163)
 
-## 📖 Documentation
+## Documentation
 
 - [Claude Desktop Setup](./CLAUDE_DESKTOP_SETUP.md) - Detailed configuration guide
 - [API Reference](https://talkhuman-mcp.vercel.app/api) - REST API endpoints
 - [MCP Spec](https://spec.modelcontextprotocol.io) - Protocol documentation
 
-## 🤝 Contributing
+## Contributing
 
 Contributions welcome! Please:
 
@@ -306,7 +306,7 @@ Contributions welcome! Please:
 3. Run `npx ultracite fix` before committing
 4. Submit a PR with clear description
 
-## 📝 License
+## License
 
 MIT License - see [LICENSE](./LICENSE) for details
 
