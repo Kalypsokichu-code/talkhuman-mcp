@@ -151,13 +151,13 @@ Your MCP will be at: `https://your-project.vercel.app/api/mcp`
 
 ## How It Works
 
-MCP server implements Streamable HTTP transport (MCP 2024-11-05 spec):
+MCP server implements Streamable HTTP transport (MCP 2024-11-05 spec) in **POST-only mode**:
 
-1. **GET** `/api/mcp` - Establishes optional SSE stream for server notifications
-2. **POST** `/api/mcp` - Handles JSON-RPC 2.0 requests (initialize, tools/list, tools/call)
-3. Client can use POST-only or POST+GET for enhanced streaming
-4. Fully stateless: no session management required
-5. Serverless-friendly: works reliably across Vercel's distributed infrastructure
+1. **POST** `/api/mcp` - Handles all JSON-RPC 2.0 requests (initialize, tools/list, tools/call)
+2. Fully stateless: no session management, no long-lived connections
+3. SSE disabled: Vercel serverless has 60s timeout, incompatible with persistent SSE streams
+4. Optimized for serverless: immediate responses, scales automatically
+5. Client compatibility: Works with all MCP clients supporting POST-only Streamable HTTP
 
 ## Architecture
 
@@ -177,12 +177,13 @@ MCP server implements Streamable HTTP transport (MCP 2024-11-05 spec):
 
 ## Technical Details
 
-### Transport: Streamable HTTP (MCP 2024-11-05)
+### Transport: Streamable HTTP POST-only (MCP 2024-11-05)
 
-- **Single endpoint**: `/api/mcp` handles both GET (SSE stream) and POST (JSON-RPC)
-- **Dual mode**: GET for optional server-to-client notifications, POST for requests
-- **No session state**: Fully stateless design perfect for serverless
-- **Standards-compliant**: Follows MCP specification with optional SSE support
+- **Single endpoint**: `/api/mcp` accepts POST requests only
+- **SSE disabled**: Long-lived SSE connections timeout on Vercel (60s limit on Hobby tier)
+- **Fully stateless**: Zero session management, perfect for serverless auto-scaling
+- **Vercel optimized**: Follows MCP spec's POST-only mode for serverless deployments
+- **Why no SSE**: Per Vercel docs, "SSE requires persistent connections which are inefficient for scaling MCP servers"
 
 ## Research Foundation
 
