@@ -63,6 +63,9 @@
         .code-container:hover .copy-btn {
             opacity: 1;
         }
+        .copy-btn.copied {
+            opacity: 1 !important;
+        }
     </style>
 </head>
 <body class="bg-background text-foreground antialiased">
@@ -92,12 +95,12 @@
                         <div class="space-y-3">
                             <div class="rounded-2xl border border-border bg-secondary/50 p-5 code-container relative">
                                 <div class="flex items-center justify-between mb-2">
-                                    <h3 class="text-sm font-semibold">1. Configure Claude Desktop</h3>
-                                    <button onclick="copyToClipboard('config-code')" class="copy-btn px-3 py-1 text-xs bg-accent hover:bg-accent/80 rounded-md transition-colors">
+                                    <h3 class="text-sm font-semibold">Cursor / IDEs</h3>
+                                    <button onclick="copyToClipboard('http-code', this)" class="copy-btn px-3 py-1 text-xs bg-accent hover:bg-accent/80 rounded-md transition-colors">
                                         Copy
                                     </button>
                                 </div>
-                                <pre id="config-code" class="text-xs"><code>{
+                                <pre id="http-code" class="text-xs"><code>{
   "mcpServers": {
     "talkhuman": {
       "url": "https://talkhuman-mcp.vercel.app/api/mcp"
@@ -105,8 +108,26 @@
   }
 }</code></pre>
                             </div>
+
+                            <div class="rounded-2xl border border-border bg-secondary/50 p-5 code-container relative">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h3 class="text-sm font-semibold">Claude Desktop</h3>
+                                    <button onclick="copyToClipboard('stdio-code', this)" class="copy-btn px-3 py-1 text-xs bg-accent hover:bg-accent/80 rounded-md transition-colors">
+                                        Copy
+                                    </button>
+                                </div>
+                                <pre id="stdio-code" class="text-xs"><code>{
+  "mcpServers": {
+    "talkhuman": {
+      "command": "node",
+      "args": ["/path/to/dist/index.js"]
+    }
+  }
+}</code></pre>
+                            </div>
+
                             <div class="rounded-2xl border border-border bg-secondary/50 p-5">
-                                <h3 class="text-sm font-semibold mb-1">2. Restart Claude Desktop</h3>
+                                <h3 class="text-sm font-semibold mb-1">Restart after config</h3>
                                 <p class="text-xs text-muted-foreground">Tools available after restart</p>
                             </div>
                         </div>
@@ -175,17 +196,18 @@
     </div>
 
     <script>
-        function copyToClipboard(elementId) {
+        function copyToClipboard(elementId, button) {
             const element = document.getElementById(elementId);
             const text = element.textContent;
 
             navigator.clipboard.writeText(text).then(() => {
-                const button = event.currentTarget;
                 const originalText = button.textContent;
                 button.textContent = 'Copied!';
+                button.classList.add('copied');
 
                 setTimeout(() => {
                     button.textContent = originalText;
+                    button.classList.remove('copied');
                 }, 2000);
             }).catch(err => {
                 console.error('Failed to copy:', err);
