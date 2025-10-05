@@ -138,11 +138,32 @@ Analyzes text across three dimensions:
 "Get writing rules for professional emails, then draft a response"
 ```
 
-## Deploy Your Own
+## Development
+
+### Prerequisites
+
+- Node.js 18+
+- npm or pnpm
+
+### Setup
 
 ```bash
 git clone https://github.com/Kalypsokichu-code/talkhuman-mcp
 cd talkhuman-mcp
+npm install
+npm run build
+```
+
+### Scripts
+
+- `npm run build` - Compile TypeScript
+- `npm run dev` - Watch mode for development
+- `npx ultracite check` - Lint code
+- `npx ultracite fix` - Auto-fix linting issues
+
+### Deploy Your Own
+
+```bash
 npm install
 vercel deploy
 ```
@@ -184,6 +205,13 @@ MCP server implements Streamable HTTP transport (MCP 2024-11-05 spec) in **POST-
 - **Fully stateless**: Zero session management, perfect for serverless auto-scaling
 - **Vercel optimized**: Follows MCP spec's POST-only mode for serverless deployments
 - **Why no SSE**: Per Vercel docs, "SSE requires persistent connections which are inefficient for scaling MCP servers"
+
+### Stack
+
+- **Runtime**: TypeScript 5.6+ with Node.js ESM
+- **Linting**: Ultracite (Biome-based formatter and linter)
+- **Validation**: Zod for schema validation
+- **Deployment**: Vercel serverless functions
 
 ## Research Foundation
 

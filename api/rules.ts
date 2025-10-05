@@ -1,11 +1,11 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { ANTI_SLOP_RULES } from '../src/rules.js';
+import type { VercelRequest, VercelResponse } from "@vercel/node";
+import { ANTI_SLOP_RULES } from "../src/rules.js";
 
 export default function handler(req: VercelRequest, res: VercelResponse) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Content-Type', 'text/plain');
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Content-Type", "text/plain");
 
-  if (req.method === 'GET') {
+  if (req.method === "GET") {
     const context = req.query.context as string;
     let rules = ANTI_SLOP_RULES;
 
@@ -17,5 +17,5 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
     return;
   }
 
-  res.status(405).json({ error: 'Method not allowed' });
+  res.status(405).json({ error: "Method not allowed" });
 }

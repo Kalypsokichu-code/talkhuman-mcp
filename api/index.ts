@@ -1,6 +1,6 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
+import type { VercelRequest, VercelResponse } from "@vercel/node";
 
-const ANTI_SLOP_RULES = `
+const _ANTI_SLOP_RULES = `
 # Core Writing Principles
 
 You must write like a human. Avoid all patterns that indicate AI-generated text.
@@ -115,32 +115,32 @@ Write so that no one can tell it was written by AI. If a phrase, structure, or w
 
 export default function handler(req: VercelRequest, res: VercelResponse) {
   // Enable CORS
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-  if (req.method === 'OPTIONS') {
+  if (req.method === "OPTIONS") {
     res.status(200).end();
     return;
   }
 
   // Root endpoint - server info
-  if (req.method === 'GET') {
+  if (req.method === "GET") {
     res.status(200).json({
-      name: 'TalkHuman MCP Server',
-      version: '1.0.0',
-      status: 'running',
-      description: 'Eliminates AI slop based on academic research',
-      tools: ['get_human_writing_rules', 'check_for_slop', 'get_slop_examples'],
+      name: "TalkHuman MCP Server",
+      version: "1.0.0",
+      status: "running",
+      description: "Eliminates AI slop based on academic research",
+      tools: ["get_human_writing_rules", "check_for_slop", "get_slop_examples"],
       usage: {
-        get_rules: 'GET /api/rules',
+        get_rules: "GET /api/rules",
         check_text: 'POST /api/check with {"text": "your text"}',
-        get_examples: 'GET /api/examples?category=phrases'
+        get_examples: "GET /api/examples?category=phrases",
       },
-      github: 'https://github.com/Kalypsokichu-code/talkhuman-mcp'
+      github: "https://github.com/Kalypsokichu-code/talkhuman-mcp",
     });
     return;
   }
 
-  res.status(405).json({ error: 'Method not allowed' });
+  res.status(405).json({ error: "Method not allowed" });
 }
