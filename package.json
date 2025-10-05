@@ -4,11 +4,13 @@
   "description": "A Model Context Protocol server that helps AI generate human-like text without AI slop",
   "type": "module",
   "main": "dist/index.js",
+  "bin": {
+    "talkhuman-mcp": "dist/index.js"
+  },
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
-    "start": "node dist/http-server.js",
-    "start:stdio": "node dist/index.js",
+    "start": "node dist/index.js",
     "prepare": "npm run build"
   },
   "keywords": [
