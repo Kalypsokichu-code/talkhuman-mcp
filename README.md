@@ -1,8 +1,8 @@
 # TalkHuman MCP
 
-> AI that writes like a human — eliminate AI slop with research-backed detection
+> Tools to eliminate AI slop from text
 
-Model Context Protocol server that helps AI write naturally. Based on expert annotations from NLP writers and philosophers analyzing AI-generated text patterns.
+Model Context Protocol server with tools to detect and eliminate AI slop from text. Based on expert annotations from NLP writers and philosophers analyzing AI-generated text patterns.
 
 [![Deploy to Vercel](https://vercel.com/button)](https://vercel.com/import/project?template=https://github.com/Kalypsokichu-code/talkhuman-mcp)
 
