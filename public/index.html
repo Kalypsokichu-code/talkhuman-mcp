@@ -7,69 +7,156 @@
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
             padding: 40px 20px;
             line-height: 1.6;
             color: #333;
         }
         h1 { color: #000; margin-bottom: 10px; }
-        .subtitle { color: #666; font-size: 18px; margin-bottom: 30px; }
-        .endpoint { background: #f5f5f5; padding: 15px; margin: 10px 0; border-radius: 5px; font-family: monospace; }
-        .method { color: #0070f3; font-weight: bold; }
-        code { background: #f0f0f0; padding: 2px 6px; border-radius: 3px; }
+        .subtitle { color: #666; font-size: 20px; margin-bottom: 40px; }
+        .hero { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 10px; margin-bottom: 40px; }
+        .hero h1 { color: white; font-size: 36px; }
+        .setup-box { background: #f8f9fa; border-left: 4px solid #0070f3; padding: 20px; margin: 20px 0; border-radius: 5px; }
+        .tool-card { background: white; border: 1px solid #e0e0e0; padding: 20px; margin: 15px 0; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .tool-name { color: #0070f3; font-weight: bold; font-size: 18px; margin-bottom: 10px; }
+        code { background: #f0f0f0; padding: 3px 8px; border-radius: 3px; font-family: 'Monaco', 'Courier New', monospace; font-size: 14px; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        pre code { background: transparent; color: #f8f8f2; }
         a { color: #0070f3; text-decoration: none; }
         a:hover { text-decoration: underline; }
+        .badge { display: inline-block; background: #0070f3; color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px; margin-right: 10px; }
+        .step { background: #fff; border: 2px solid #0070f3; border-radius: 50%; width: 30px; height: 30px; display: inline-flex; align-items: center; justify-content: center; font-weight: bold; color: #0070f3; margin-right: 10px; }
+        ul.features { list-style: none; padding: 0; }
+        ul.features li:before { content: "✓ "; color: #0070f3; font-weight: bold; margin-right: 8px; }
     </style>
 </head>
 <body>
-    <h1>🚀 TalkHuman MCP</h1>
-    <p class="subtitle">Eliminate AI slop from your writing</p>
-
-    <p>Based on academic research from <a href="https://arxiv.org/abs/2509.19163" target="_blank">arXiv:2509.19163v1</a></p>
-
-    <h2>API Endpoints</h2>
-
-    <div class="endpoint">
-        <span class="method">GET</span> /api
-        <p>Server info and available tools</p>
+    <div class="hero">
+        <h1>🚀 TalkHuman MCP</h1>
+        <p class="subtitle" style="color: rgba(255,255,255,0.9);">Make AI write like a human - eliminate AI slop based on academic research</p>
     </div>
 
-    <div class="endpoint">
-        <span class="method">GET</span> /api/rules
-        <p>Get comprehensive anti-slop writing rules</p>
-        <p>Query params: <code>?context=your-context</code></p>
+    <h2>🎯 What is This?</h2>
+    <p>TalkHuman is a <strong>Model Context Protocol (MCP) server</strong> that helps AI assistants write naturally by detecting and preventing "AI slop" - the telltale patterns that make AI-generated text obvious.</p>
+
+    <p>Based on research from <a href="https://arxiv.org/abs/2509.19163" target="_blank">arXiv:2509.19163v1</a> analyzing expert annotations from NLP writers and philosophers.</p>
+
+    <h2>⚡ Quick Setup (2 minutes)</h2>
+
+    <div class="setup-box">
+        <h3><span class="step">1</span> Open Claude Desktop Settings</h3>
+        <p>Click <strong>Settings → Developer → Edit Config</strong> (or manually edit <code>claude_desktop_config.json</code>)</p>
     </div>
 
-    <div class="endpoint">
-        <span class="method">POST</span> /api/check
-        <p>Analyze text for AI slop indicators</p>
-        <p>Body: <code>{ "text": "your text here" }</code></p>
+    <div class="setup-box">
+        <h3><span class="step">2</span> Add TalkHuman MCP</h3>
+        <p>Add this configuration:</p>
+        <pre><code>{
+  "mcpServers": {
+    "talkhuman": {
+      "url": "https://talkhuman-mcp.vercel.app/api/mcp"
+    }
+  }
+}</code></pre>
     </div>
 
-    <div class="endpoint">
-        <span class="method">GET</span> /api/examples
-        <p>Get examples of AI slop patterns to avoid</p>
-        <p>Query params: <code>?category=phrases|structure|tone|all</code></p>
+    <div class="setup-box">
+        <h3><span class="step">3</span> Restart Claude Desktop</h3>
+        <p>Close and reopen Claude Desktop. You'll see 🔌 TalkHuman tools available!</p>
     </div>
 
-    <h2>Quick Test</h2>
-    <p>Try it now:</p>
-    <div class="endpoint">
-        curl https://talkhuman-mcp.vercel.app/api/rules
+    <h2>🛠️ Available Tools</h2>
+
+    <div class="tool-card">
+        <div class="tool-name">get_human_writing_rules</div>
+        <p>Get comprehensive anti-slop rules for any writing context. Returns research-based guidelines to make AI text sound human.</p>
+        <p><strong>Example:</strong></p>
+        <pre><code>Get writing rules for a technical blog post</code></pre>
     </div>
 
-    <h2>GitHub</h2>
-    <p><a href="https://github.com/Kalypsokichu-code/talkhuman-mcp" target="_blank">View source code and documentation</a></p>
+    <div class="tool-card">
+        <div class="tool-name">check_for_slop</div>
+        <p>Analyze text for AI slop indicators. Detects cliché phrases, repetitive patterns, and other telltale signs.</p>
+        <p><strong>Example:</strong></p>
+        <pre><code>Check this for slop: "In today's digital landscape,
+it's important to note that we should leverage
+cutting-edge solutions to delve into..."</code></pre>
+        <p><strong>Returns:</strong> ⚠️ AI Cliché Phrases Found: landscape, it's important to note, leverage, cutting-edge, delve into</p>
+    </div>
 
-    <h2>What is AI Slop?</h2>
-    <p>AI slop refers to telltale patterns in AI-generated text:</p>
+    <div class="tool-card">
+        <div class="tool-name">get_slop_examples</div>
+        <p>Get examples of AI slop patterns to avoid, categorized by type (phrases, structure, tone).</p>
+        <p><strong>Example:</strong></p>
+        <pre><code>Show me phrase examples to avoid</code></pre>
+    </div>
+
+    <h2>📊 What Gets Detected?</h2>
+
+    <h3>AI Cliché Phrases (Never Use These)</h3>
     <ul>
-        <li><strong>Information Utility:</strong> Low density, irrelevant content</li>
-        <li><strong>Style Quality:</strong> Repetitive structures, clichés like "delve into", "leverage"</li>
-        <li><strong>Structure:</strong> Excessive verbosity, poor coherence</li>
+        <li>"delve into" → use "explore"</li>
+        <li>"leverage" → use "use"</li>
+        <li>"it's important to note" → just state it</li>
+        <li>"in today's digital age" → be specific</li>
+        <li>"robust", "seamless", "holistic", "paradigm shift"</li>
+        <li>"cutting-edge", "game changer", "unlock the potential"</li>
     </ul>
 
-    <p>This tool helps detect and prevent these patterns based on expert research.</p>
+    <h3>Structural Issues</h3>
+    <ul>
+        <li>Repetitive sentence starts</li>
+        <li>Excessive bullet points and lists</li>
+        <li>Overly formal language ("furthermore", "moreover")</li>
+        <li>Long, winding sentences (>25 words average)</li>
+    </ul>
+
+    <h3>Research-Based Detection</h3>
+    <p>The tool analyzes text across three dimensions from academic research:</p>
+    <ul class="features">
+        <li><strong>Information Utility:</strong> Density, relevance, quality (β=0.06 correlation)</li>
+        <li><strong>Style Quality:</strong> Repetition, coherence, tone, fluency (β=0.05)</li>
+        <li><strong>Structure:</strong> Verbosity, bias patterns</li>
+    </ul>
+
+    <h2>💡 Usage Examples</h2>
+
+    <h3>In Claude Desktop</h3>
+    <pre><code>// Ask Claude to use the tools
+"Use the check_for_slop tool on my draft email"
+
+// Get rules for specific context
+"Get human writing rules for casual social media posts"
+
+// See what to avoid
+"Show me examples of AI slop to avoid in my writing"</code></pre>
+
+    <h3>Also Works With</h3>
+    <ul class="features">
+        <li>Cursor IDE</li>
+        <li>Any MCP-compatible tool</li>
+        <li>Custom MCP clients</li>
+    </ul>
+
+    <h2>🔗 Links</h2>
+    <p>
+        <a href="https://github.com/Kalypsokichu-code/talkhuman-mcp" target="_blank">📦 GitHub Repository</a> •
+        <a href="https://arxiv.org/abs/2509.19163" target="_blank">📄 Research Paper</a> •
+        <a href="https://talkhuman-mcp.vercel.app/api/mcp" target="_blank">🔌 MCP Endpoint</a>
+    </p>
+
+    <h2>🚀 Deploy Your Own</h2>
+    <pre><code>git clone https://github.com/Kalypsokichu-code/talkhuman-mcp
+cd talkhuman-mcp
+npm install
+vercel deploy</code></pre>
+
+    <hr style="margin: 40px 0; border: none; border-top: 1px solid #e0e0e0;">
+
+    <p style="text-align: center; color: #666;">
+        Made with research from experts in NLP, philosophy, and writing. <br>
+        Open source under MIT License.
+    </p>
 </body>
 </html>

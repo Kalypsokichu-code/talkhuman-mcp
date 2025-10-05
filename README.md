@@ -1,167 +1,185 @@
-# TalkHuman MCP
+# TalkHuman MCP 🚀
 
-A Model Context Protocol (MCP) server that helps AI write like a human by eliminating "AI slop" - the telltale patterns, phrases, and structures that make AI-generated text obvious.
+> Make AI write like a human - eliminate AI slop based on academic research
 
-Based on academic research from "Measuring AI Slop in Text" ([arXiv:2509.19163v1](https://arxiv.org/abs/2509.19163)), this MCP provides system-level rules and tools to detect and prevent AI writing patterns.
+A Model Context Protocol (MCP) server that helps AI assistants write naturally by detecting and preventing "AI slop" - the telltale patterns that make AI-generated text obvious.
+
+[![Deploy to Vercel](https://vercel.com/button)](https://vercel.com/import/project?template=https://github.com/Kalypsokichu-code/talkhuman-mcp)
 
 ## What is AI Slop?
 
-AI slop refers to low-quality AI-generated text with these characteristics:
+AI slop refers to low-quality AI-generated text with telltale patterns:
 
 - **Information Utility Issues**: Low density, irrelevant content, factual errors
-- **Style Quality Problems**: Repetitive structures, unnatural tone, AI clichés
-- **Structure Issues**: Excessive verbosity, poor coherence, bias
+- **Style Quality Problems**: Repetitive structures, AI clichés like "delve into", "leverage"
+- **Structure Issues**: Excessive verbosity, poor coherence
 
-## Features
+Based on research from [arXiv:2509.19163v1](https://arxiv.org/abs/2509.19163) analyzing expert annotations from NLP writers and philosophers.
 
-### 3 MCP Tools
+## Quick Setup (2 minutes)
 
-1. **`get_human_writing_rules`** - Get comprehensive anti-slop rules for any writing task
-2. **`check_for_slop`** - Analyze text for AI slop indicators
-3. **`get_slop_examples`** - See examples of patterns to avoid
+### For Claude Desktop
 
-## Installation
+1. **Open Settings** → Developer → Edit Config (or manually edit `claude_desktop_config.json`)
 
-### Option 1: Remote HTTP/SSE (Recommended for Vercel)
-
-Use the hosted version (deploy to Vercel first):
+2. **Add TalkHuman MCP:**
 
 ```json
 {
   "mcpServers": {
     "talkhuman": {
-      "url": "https://your-deployment.vercel.app/sse"
+      "url": "https://talkhuman-mcp.vercel.app/api/mcp"
     }
   }
 }
 ```
 
-### Option 2: Local stdio (Claude Desktop)
+3. **Restart Claude Desktop** - You'll see 🔌 TalkHuman tools available!
 
-Add to your `claude_desktop_config.json`:
+### For Other MCP Clients
 
-```json
-{
-  "mcpServers": {
-    "talkhuman": {
-      "command": "npx",
-      "args": ["-y", "talkhuman-mcp"]
-    }
-  }
-}
+Use the MCP endpoint: `https://talkhuman-mcp.vercel.app/api/mcp`
+
+Works with:
+- Cursor IDE
+- Any MCP-compatible tool
+- Custom MCP clients
+
+## Available Tools
+
+### 1. `get_human_writing_rules`
+
+Get comprehensive anti-slop rules for any writing context.
+
+**Example:**
+```
+Get writing rules for a technical blog post
 ```
 
-### Option 3: Self-Hosted
+Returns research-based guidelines to make AI text sound human.
 
-```bash
-git clone https://github.com/yourusername/talkhuman-mcp
-cd talkhuman-mcp
-npm install
-npm start
+### 2. `check_for_slop`
+
+Analyze text for AI slop indicators. Detects cliché phrases, repetitive patterns, and telltale signs.
+
+**Example:**
+```
+Check this for slop: "In today's digital landscape, it's important to note
+that we should leverage cutting-edge solutions to delve into the robust
+ecosystem..."
 ```
 
-Server runs on `http://localhost:3000` with SSE endpoint at `/sse`
-
-## Usage
-
-### Get Anti-Slop Rules
-
-```typescript
-// In your AI prompt
-const rules = await use_mcp_tool("get_human_writing_rules", {
-  context: "technical blog post"
-});
-// Returns comprehensive rules to add to system prompt
+**Returns:**
+```
+⚠️ AI Cliché Phrases Found: landscape, it's important to note, leverage,
+cutting-edge, delve into, robust, ecosystem
 ```
 
-### Check Text for Slop
+### 3. `get_slop_examples`
 
-```typescript
-const analysis = await use_mcp_tool("check_for_slop", {
-  text: "In today's digital landscape, it's important to note that we should leverage cutting-edge solutions..."
-});
-// Returns: "⚠️ AI Cliché Phrases Found: landscape, it's important to note, leverage, cutting-edge"
+Get examples of AI slop patterns to avoid, categorized by type.
+
+**Example:**
+```
+Show me phrase examples to avoid
 ```
 
-### Get Examples
+Categories: `phrases`, `structure`, `tone`, `all`
 
-```typescript
-const examples = await use_mcp_tool("get_slop_examples", {
-  category: "phrases" // or "structure", "tone", "all"
-});
-```
+## What Gets Detected?
 
-## Key Anti-Slop Rules
+### AI Cliché Phrases (Never Use These)
 
-### Never Use These Phrases
 - "delve into" → use "explore"
 - "leverage" → use "use"
 - "it's important to note" → just state it
 - "in today's digital age" → be specific
-- "robust", "seamless", "holistic", "synergy"
+- "robust", "seamless", "holistic", "paradigm shift"
+- "cutting-edge", "game changer", "unlock the potential"
 
-### Avoid These Patterns
-- Starting every sentence the same way
-- Overusing bullet points and lists
-- Excessive formality and hedging
-- Meta-commentary about what you'll say
-- Generic corporate jargon
+### Structural Issues
 
-### Write Like a Human
-- Vary sentence structure and length
-- Be direct and specific
-- Use natural, conversational tone
-- Cut unnecessary words
-- Show personality when appropriate
+- Repetitive sentence starts
+- Excessive bullet points and lists
+- Overly formal language ("furthermore", "moreover")
+- Long, winding sentences (>25 words average)
 
-## Development
+### Research-Based Detection
+
+Analyzes text across three dimensions from academic research:
+
+- **Information Utility**: Density, relevance, quality (β=0.06 correlation)
+- **Style Quality**: Repetition, coherence, tone, fluency (β=0.05)
+- **Structure**: Verbosity, bias patterns
+
+## Usage Examples
+
+### In Claude Desktop
+
+```
+// Check your writing
+"Use the check_for_slop tool on my draft email"
+
+// Get context-specific rules
+"Get human writing rules for casual social media posts"
+
+// See what to avoid
+"Show me examples of AI slop to avoid in my writing"
+```
+
+### As a Writing Assistant
+
+```
+// Before finalizing content
+"Check this article draft for AI slop patterns"
+
+// When drafting
+"Get writing rules for professional emails, then draft a response"
+
+// Learning what to avoid
+"Show me all slop examples so I can avoid them"
+```
+
+## Deploy Your Own
 
 ```bash
+# Clone the repository
+git clone https://github.com/Kalypsokichu-code/talkhuman-mcp
+cd talkhuman-mcp
+
 # Install dependencies
 npm install
 
-# Build
-npm run build
-
-# Run HTTP/SSE server (modern, for remote hosting)
-npm start
-
-# Run stdio server (legacy, for local CLI)
-npm run start:stdio
-
-# Watch mode
-npm run dev
-```
-
-## Deploy to Vercel
-
-This MCP uses modern HTTP/SSE transport for remote hosting:
-
-```bash
-# Install Vercel CLI
-npm i -g vercel
-
-# Deploy
+# Deploy to Vercel
 vercel deploy
-
-# Configure your MCP client with the URL
-# https://your-project.vercel.app/sse
 ```
 
-## Transport Methods
-
-- **HTTP/SSE** (default): Modern approach, works remotely, perfect for Vercel
-- **stdio**: Legacy approach, local only, works with `npm run start:stdio`
+Your MCP will be available at: `https://your-project.vercel.app/api/mcp`
 
 ## How It Works
 
-The MCP analyzes text across three dimensions identified in academic research:
+The MCP server implements the **SSE (Server-Sent Events)** transport protocol:
 
-1. **Information Utility** (Density, Relevance, Quality)
-2. **Style Quality** (Repetition, Coherence, Tone, Fluency)
-3. **Structure** (Verbosity, Bias)
+1. Client connects to `/api/mcp` endpoint
+2. Server streams MCP events over SSE
+3. Tools are invoked via JSON-RPC 2.0 messages
+4. Results are returned based on research-backed anti-slop rules
 
-These correlate with human perception of "slop" with high accuracy (AUROC 0.52-0.55).
+## Architecture
+
+```
+├── api/
+│   ├── mcp.ts          # MCP SSE server endpoint
+│   ├── index.ts        # API info endpoint
+│   ├── rules.ts        # Get anti-slop rules
+│   ├── check.ts        # Check text for slop
+│   └── examples.ts     # Get slop examples
+├── src/
+│   └── rules.ts        # Anti-slop rules taxonomy
+├── public/
+│   └── index.html      # Documentation site
+└── vercel.json         # Vercel deployment config
+```
 
 ## Research Foundation
 
@@ -172,11 +190,19 @@ Based on expert annotations from NLP writers, philosophers, and industry profess
 - **Tone** (β=0.05) - Natural voice
 - Coherence, Fluency, Structure also significant
 
+Correlation with human perception of "slop": AUROC 0.52-0.55
+
 ## Contributing
 
-This is an open-source project. PRs welcome!
+PRs welcome! This is an open-source project to help everyone write better with AI.
 
 ## License
 
 MIT
 
+---
+
+<p align="center">
+  <strong>Live Demo:</strong> <a href="https://talkhuman-mcp.vercel.app">talkhuman-mcp.vercel.app</a><br>
+  <strong>MCP Endpoint:</strong> <code>https://talkhuman-mcp.vercel.app/api/mcp</code>
+</p>
