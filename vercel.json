@@ -1,6 +1,6 @@
 {
   "functions": {
-    "api/mcp/index.ts": {
+    "api/mcp.ts": {
       "maxDuration": 300
     }
   }
