@@ -21,7 +21,15 @@
     "human-like",
     "anti-slop"
   ],
-  "author": "",
+  "author": "Kalypso",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Kalypsokichu-code/talkhuman-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Kalypsokichu-code/talkhuman-mcp/issues"
+  },
+  "homepage": "https://talkhuman-mcp.vercel.app",
   "license": "MIT",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",

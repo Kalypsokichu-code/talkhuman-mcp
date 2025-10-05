@@ -209,73 +209,73 @@ Write so no one can tell it was AI-generated. If a phrase, structure, or word ch
 `;
 
 export const SLOP_INDICATORS = {
-	informationUtility: {
-		density: [
-			"Over-explanation of simple concepts",
-			"Excessive background information",
-			"Stating the obvious",
-			"Filler content without substance",
-		],
-		relevance: [
-			"Tangential information",
-			"Irrelevant details",
-			"Off-topic commentary",
-			"Unnecessary context",
-		],
-		quality: [
-			"Factual errors",
-			"Hallucinations",
-			"Fallacious reasoning",
-			"Unverified claims",
-			"Subjective bias presented as fact",
-		],
-	},
-	styleQuality: {
-		repetition: [
-			"Same phrases repeated",
-			"Formulaic sentence structures",
-			"Template-like patterns",
-			"Lexical repetition",
-		],
-		coherence: [
-			"Disconnected ideas",
-			"Poor logical flow",
-			"Abrupt transitions",
-			"Lack of structure",
-		],
-		tone: [
-			"Excessive formality",
-			"Over-hedging",
-			"Inappropriate register",
-			"Robotic voice",
-		],
-		fluency: [
-			"Unnatural phrasing",
-			"Awkward constructions",
-			"Non-idiomatic language",
-		],
-		diversity: [
-			"Limited vocabulary",
-			"Repetitive word choice",
-			"Monotonous style",
-		],
-		wordComplexity: [
-			"Unnecessarily complex words",
-			"Jargon without purpose",
-			"Pretentious vocabulary",
-		],
-	},
-	structure: {
-		verbosity: [
-			"Excessive wordiness",
-			"Redundant phrases",
-			"Overly long sentences",
-			"Circular reasoning",
-		],
-		bias: [
-			"Unwarranted subjectivity",
-			"Rhetorical manipulation",
-			"Unbalanced perspective",
-		],
-	},
+  informationUtility: {
+    density: [
+      "Over-explanation of simple concepts",
+      "Excessive background information",
+      "Stating the obvious",
+      "Filler content without substance",
+    ],
+    relevance: [
+      "Tangential information",
+      "Irrelevant details",
+      "Off-topic commentary",
+      "Unnecessary context",
+    ],
+    quality: [
+      "Factual errors",
+      "Hallucinations",
+      "Fallacious reasoning",
+      "Unverified claims",
+      "Subjective bias presented as fact",
+    ],
+  },
+  styleQuality: {
+    repetition: [
+      "Same phrases repeated",
+      "Formulaic sentence structures",
+      "Template-like patterns",
+      "Lexical repetition",
+    ],
+    coherence: [
+      "Disconnected ideas",
+      "Poor logical flow",
+      "Abrupt transitions",
+      "Lack of structure",
+    ],
+    tone: [
+      "Excessive formality",
+      "Over-hedging",
+      "Inappropriate register",
+      "Robotic voice",
+    ],
+    fluency: [
+      "Unnatural phrasing",
+      "Awkward constructions",
+      "Non-idiomatic language",
+    ],
+    diversity: [
+      "Limited vocabulary",
+      "Repetitive word choice",
+      "Monotonous style",
+    ],
+    wordComplexity: [
+      "Unnecessarily complex words",
+      "Jargon without purpose",
+      "Pretentious vocabulary",
+    ],
+  },
+  structure: {
+    verbosity: [
+      "Excessive wordiness",
+      "Redundant phrases",
+      "Overly long sentences",
+      "Circular reasoning",
+    ],
+    bias: [
+      "Unwarranted subjectivity",
+      "Rhetorical manipulation",
+      "Unbalanced perspective",
+    ],
+  },
 };

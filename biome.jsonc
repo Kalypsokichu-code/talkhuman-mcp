@@ -12,7 +12,8 @@
       },
       "suspicious": {
         "noExplicitAny": "off",
-        "useAwait": "off"
+        "useAwait": "off",
+        "noConsole": "off"
       },
       "complexity": {
         "noExcessiveCognitiveComplexity": "off"

@@ -299,12 +299,13 @@ Full paper: [arXiv:2509.19163](https://arxiv.org/abs/2509.19163)
 
 ## Contributing
 
-Contributions welcome! Please:
+Contributions welcome! See [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
 
-1. Fork the repository
-2. Create a feature branch
-3. Run `npx ultracite fix` before committing
-4. Submit a PR with clear description
+Quick checklist:
+- Run `npx ultracite fix` before committing
+- Keep changes simple and focused
+- Add examples for new patterns
+- Update docs if needed
 
 ## License
 
