@@ -1,7 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { z, type ZodTypeAny } from "zod";
+import { z } from "zod";
 import { ANTI_SLOP_RULES } from "../src/rules.js";
 
 // Create and configure a new MCP server instance for this request
@@ -18,14 +18,14 @@ function createServer(): McpServer {
       title: "Get Human Writing Rules",
       description:
         "Get comprehensive rules for writing like a human and avoiding AI slop. Use these rules as system-level instructions for any text generation task.",
-      inputSchema: z.object({
+      inputSchema: {
         context: z
           .string()
           .optional()
           .describe(
             "Optional: The context or type of writing (e.g., 'technical documentation', 'casual email', 'blog post')"
           ),
-      }) as ZodTypeAny,
+      },
     },
     async ({ context }) => {
       let rules = ANTI_SLOP_RULES;
@@ -47,9 +47,9 @@ function createServer(): McpServer {
       title: "Check for AI Slop",
       description:
         "Analyze text for AI slop indicators across three categories: Information Utility, Style Quality, and Structure. Returns specific patterns to avoid.",
-      inputSchema: z.object({
+      inputSchema: {
         text: z.string().describe("The text to analyze for AI slop indicators"),
-      }) as ZodTypeAny,
+      },
     },
     async ({ text }) => {
       const findings: string[] = [];
@@ -198,12 +198,12 @@ function createServer(): McpServer {
       title: "Get Slop Examples",
       description:
         "Get examples of common AI slop phrases and patterns to avoid, categorized by type.",
-      inputSchema: z.object({
+      inputSchema: {
         category: z
           .enum(["phrases", "structure", "tone", "all"])
           .optional()
           .describe("The category of slop examples to retrieve"),
-      }) as ZodTypeAny,
+      },
     },
     async ({ category }) => {
       const cat = category || "all";
