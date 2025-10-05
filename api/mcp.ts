@@ -185,7 +185,7 @@ async function executeTool(name: string, args: any) {
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   if (req.method === 'OPTIONS') {
@@ -193,7 +193,30 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return;
   }
 
-  // Streamable HTTP only uses POST for JSON-RPC messages
+  // Handle GET requests for SSE stream (optional server-to-client notifications)
+  if (req.method === 'GET') {
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
+    
+    // Send initial connection event
+    res.write('event: open\n');
+    res.write('data: {"type":"connection","status":"connected"}\n\n');
+    
+    // Keep connection alive with periodic pings
+    const keepAlive = setInterval(() => {
+      res.write(': keepalive\n\n');
+    }, 30000);
+    
+    req.on('close', () => {
+      clearInterval(keepAlive);
+      res.end();
+    });
+    
+    return;
+  }
+
+  // Handle POST requests for JSON-RPC messages
   if (req.method === 'POST') {
     try {
       const message = req.body;

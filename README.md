@@ -153,10 +153,10 @@ Your MCP will be at: `https://your-project.vercel.app/api/mcp`
 
 MCP server implements Streamable HTTP transport (MCP 2024-11-05 spec):
 
-1. Client sends POST requests to `/api/mcp` endpoint
-2. Server processes JSON-RPC 2.0 messages
-3. Tools invoked and executed via MCP SDK
-4. Results returned immediately (no session state required)
+1. **GET** `/api/mcp` - Establishes optional SSE stream for server notifications
+2. **POST** `/api/mcp` - Handles JSON-RPC 2.0 requests (initialize, tools/list, tools/call)
+3. Client can use POST-only or POST+GET for enhanced streaming
+4. Fully stateless: no session management required
 5. Serverless-friendly: works reliably across Vercel's distributed infrastructure
 
 ## Architecture
@@ -179,10 +179,10 @@ MCP server implements Streamable HTTP transport (MCP 2024-11-05 spec):
 
 ### Transport: Streamable HTTP (MCP 2024-11-05)
 
-- **Single endpoint**: `/api/mcp` handles all JSON-RPC messages via POST
-- **No session state**: Stateless design perfect for serverless
-- **Standards-compliant**: Follows latest MCP specification
-- **Deprecated SSE removed**: Old HTTP+SSE transport replaced (March 2025 spec update)
+- **Single endpoint**: `/api/mcp` handles both GET (SSE stream) and POST (JSON-RPC)
+- **Dual mode**: GET for optional server-to-client notifications, POST for requests
+- **No session state**: Fully stateless design perfect for serverless
+- **Standards-compliant**: Follows MCP specification with optional SSE support
 
 ## Research Foundation
 
