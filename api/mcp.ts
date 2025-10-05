@@ -1,5 +1,4 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { Tool } from "@modelcontextprotocol/sdk/types.js";
 import { ANTI_SLOP_RULES } from "../src/rules.js";
 
@@ -47,26 +46,8 @@ const TOOLS: Tool[] = [
   },
 ];
 
-// Create MCP server instance
-const server = new Server(
-  {
-    name: "talkhuman-mcp",
-    version: "1.0.0",
-  },
-  {
-    capabilities: {
-      tools: {},
-    },
-  }
-);
-
-// Register tool handlers
-server.setRequestHandler("tools/list", async () => ({
-  tools: TOOLS,
-}));
-
-server.setRequestHandler("tools/call", async (request) => {
-  const { name, arguments: args } = request.params;
+// Tool execution function
+async function executeTool(name: string, args: any) {
 
   switch (name) {
     case "get_human_writing_rules": {
@@ -199,7 +180,7 @@ server.setRequestHandler("tools/call", async (request) => {
     default:
       throw new Error(`Unknown tool: ${name}`);
   }
-});
+}
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // CORS headers
@@ -252,22 +233,20 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         return;
       }
 
-      // Route through the MCP Server
+      // Handle tools/list
       if (message.method === "tools/list") {
-        const result = await server.request({ method: "tools/list", params: {} }, {} as any);
         res.json({
           jsonrpc: "2.0",
           id: message.id,
-          result,
+          result: { tools: TOOLS },
         });
         return;
       }
 
+      // Handle tools/call
       if (message.method === "tools/call") {
-        const result = await server.request(
-          { method: "tools/call", params: message.params },
-          {} as any
-        );
+        const { name, arguments: args } = message.params;
+        const result = await executeTool(name, args);
         res.json({
           jsonrpc: "2.0",
           id: message.id,
