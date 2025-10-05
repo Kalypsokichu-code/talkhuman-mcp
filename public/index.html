@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TalkHuman MCP - Eliminate AI Slop</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        h1 { color: #000; margin-bottom: 10px; }
+        .subtitle { color: #666; font-size: 18px; margin-bottom: 30px; }
+        .endpoint { background: #f5f5f5; padding: 15px; margin: 10px 0; border-radius: 5px; font-family: monospace; }
+        .method { color: #0070f3; font-weight: bold; }
+        code { background: #f0f0f0; padding: 2px 6px; border-radius: 3px; }
+        a { color: #0070f3; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <h1>🚀 TalkHuman MCP</h1>
+    <p class="subtitle">Eliminate AI slop from your writing</p>
+
+    <p>Based on academic research from <a href="https://arxiv.org/abs/2509.19163" target="_blank">arXiv:2509.19163v1</a></p>
+
+    <h2>API Endpoints</h2>
+
+    <div class="endpoint">
+        <span class="method">GET</span> /api
+        <p>Server info and available tools</p>
+    </div>
+
+    <div class="endpoint">
+        <span class="method">GET</span> /api/rules
+        <p>Get comprehensive anti-slop writing rules</p>
+        <p>Query params: <code>?context=your-context</code></p>
+    </div>
+
+    <div class="endpoint">
+        <span class="method">POST</span> /api/check
+        <p>Analyze text for AI slop indicators</p>
+        <p>Body: <code>{ "text": "your text here" }</code></p>
+    </div>
+
+    <div class="endpoint">
+        <span class="method">GET</span> /api/examples
+        <p>Get examples of AI slop patterns to avoid</p>
+        <p>Query params: <code>?category=phrases|structure|tone|all</code></p>
+    </div>
+
+    <h2>Quick Test</h2>
+    <p>Try it now:</p>
+    <div class="endpoint">
+        curl https://talkhuman-mcp.vercel.app/api/rules
+    </div>
+
+    <h2>GitHub</h2>
+    <p><a href="https://github.com/Kalypsokichu-code/talkhuman-mcp" target="_blank">View source code and documentation</a></p>
+
+    <h2>What is AI Slop?</h2>
+    <p>AI slop refers to telltale patterns in AI-generated text:</p>
+    <ul>
+        <li><strong>Information Utility:</strong> Low density, irrelevant content</li>
+        <li><strong>Style Quality:</strong> Repetitive structures, clichés like "delve into", "leverage"</li>
+        <li><strong>Structure:</strong> Excessive verbosity, poor coherence</li>
+    </ul>
+
+    <p>This tool helps detect and prevent these patterns based on expert research.</p>
+</body>
+</html>
