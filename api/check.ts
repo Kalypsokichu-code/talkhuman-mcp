@@ -68,7 +68,7 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
   );
 
   const repetitiveStarts = Object.entries(startCounts)
-    .filter(([_, count]) => count >= 3)
+    .filter(([_, count]) => (count as number) >= 3)
     .map(([word]) => word);
 
   if (repetitiveStarts.length > 0) {

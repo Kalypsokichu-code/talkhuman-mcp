@@ -1,7 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { z } from "zod";
+import { z, type ZodTypeAny } from "zod";
 import { ANTI_SLOP_RULES } from "../src/rules.js";
 
 // Create and configure a new MCP server instance for this request
@@ -25,7 +25,7 @@ function createServer(): McpServer {
           .describe(
             "Optional: The context or type of writing (e.g., 'technical documentation', 'casual email', 'blog post')"
           ),
-      }),
+      }) as ZodTypeAny,
     },
     async ({ context }) => {
       let rules = ANTI_SLOP_RULES;
@@ -49,7 +49,7 @@ function createServer(): McpServer {
         "Analyze text for AI slop indicators across three categories: Information Utility, Style Quality, and Structure. Returns specific patterns to avoid.",
       inputSchema: z.object({
         text: z.string().describe("The text to analyze for AI slop indicators"),
-      }),
+      }) as ZodTypeAny,
     },
     async ({ text }) => {
       const findings: string[] = [];
@@ -105,7 +105,7 @@ function createServer(): McpServer {
       );
 
       const repetitiveStarts = Object.entries(startCounts)
-        .filter(([_, count]) => count >= 3)
+        .filter(([_, count]) => (count as number) >= 3)
         .map(([word]) => word);
 
       if (repetitiveStarts.length > 0) {
@@ -146,7 +146,7 @@ function createServer(): McpServer {
       }
 
       // Density check (information content)
-      const uniqueWords = new Set(words.map((w) => w.toLowerCase()));
+      const uniqueWords = new Set(words.map((w: string) => w.toLowerCase()));
       const lexicalDensity = uniqueWords.size / words.length;
       if (lexicalDensity < 0.4) {
         findings.push(
@@ -203,7 +203,7 @@ function createServer(): McpServer {
           .enum(["phrases", "structure", "tone", "all"])
           .optional()
           .describe("The category of slop examples to retrieve"),
-      }),
+      }) as ZodTypeAny,
     },
     async ({ category }) => {
       const cat = category || "all";
