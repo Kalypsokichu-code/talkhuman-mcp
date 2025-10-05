@@ -1,5 +1,21 @@
-# TalkHuman MCP
+```
+ooooooooooooo           oooo  oooo
+8'   888   `8           `888  `888
+     888       .oooo.    888   888  oooo
+     888      `P  )88b   888   888 .8P'
+     888       .oP"888   888   888888.
+     888      d8(  888   888   888 `88b.
+    o888o     `Y888""8o o888o o888o o888o
 
+ooooo   ooooo
+`888'   `888'
+ 888     888  oooo  oooo  ooo. .oo.  .oo.    .oooo.   ooo. .oo.
+ 888ooooo888  `888  `888  `888P"Y88bP"Y88b  `P  )88b  `888P"Y88b
+ 888     888   888   888   888   888   888   .oP"888   888   888
+ 888     888   888   888   888   888   888  d8(  888   888   888
+o888o   o888o  `V88V"V8P' o888o o888o o888o `Y888""8o o888o o888o
+```
+# TalkHuman MCP
 > AI that writes like a human
 
 Model Context Protocol server that eliminates AI slop. Based on research analyzing expert annotations from NLP writers and philosophers.
