@@ -109,21 +109,35 @@
 }</code></pre>
                             </div>
 
-                            <div class="rounded-2xl border border-border bg-secondary/50 p-5 code-container relative">
-                                <div class="flex items-center justify-between mb-2">
-                                    <h3 class="text-sm font-semibold">Claude Desktop</h3>
-                                    <button onclick="copyToClipboard('stdio-code', this)" class="copy-btn px-3 py-1 text-xs bg-accent hover:bg-accent/80 rounded-md transition-colors">
-                                        Copy
-                                    </button>
-                                </div>
-                                <pre id="stdio-code" class="text-xs"><code>{
+                            <div class="rounded-2xl border border-border bg-secondary/50 p-5">
+                                <h3 class="text-sm font-semibold mb-3">Claude Desktop</h3>
+                                <div class="space-y-3 text-xs text-muted-foreground">
+                                    <div>
+                                        <p class="mb-1">1. Clone the repository:</p>
+                                        <code class="text-xs bg-background/50 px-2 py-1 rounded">git clone https://github.com/Kalypsokichu-code/talkhuman-mcp.git</code>
+                                    </div>
+                                    <div>
+                                        <p class="mb-1">2. Install dependencies and build:</p>
+                                        <code class="text-xs bg-background/50 px-2 py-1 rounded">npm install && npm run build</code>
+                                    </div>
+                                    <div>
+                                        <p class="mb-1">3. Add to Claude Desktop config:</p>
+                                        <div class="code-container relative mt-2">
+                                            <button onclick="copyToClipboard('stdio-code', this)" class="copy-btn px-3 py-1 text-xs bg-accent hover:bg-accent/80 rounded-md transition-colors absolute top-2 right-2">
+                                                Copy
+                                            </button>
+                                            <pre id="stdio-code" class="text-xs bg-background/50 p-3 rounded"><code>{
   "mcpServers": {
     "talkhuman": {
       "command": "node",
-      "args": ["/path/to/dist/index.js"]
+      "args": ["/path/to/talkhuman-mcp/dist/index.js"]
     }
   }
 }</code></pre>
+                                        </div>
+                                    </div>
+                                    <p>4. Restart Claude Desktop</p>
+                                </div>
                             </div>
 
                             <div class="rounded-2xl border border-border bg-secondary/50 p-5">
